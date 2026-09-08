@@ -1,0 +1,55 @@
++-----------------------+
+| Raw Heterogeneous Data |
++-----------+-----------+
+            |
+            v
+[ Schema Normalization Engine ]
+|
+v
+[ Strict Train/Test Split ]  <-- Prevents Information Leakage
+|
++-----------+-----------+
+|                       |
+v                       v
+[ Robust Scale/Impute ] [ OneHot Encoding ]
+|                       |
++-----------+-----------+
+|
+v
+[ LassoCV Feature Selection ]
+|
+v
+[ Hyperparameter-Tuned Ensemble ]
+|
+v
+[ Serialized Artifact (.pkl) ]
+
+
+---
+
+## 🔑 Key Engineering Design Choices
+
+1. **Zero Data Leakage Paradigm**: Preprocessing models (imputers, scalers, encoders) are exclusively fit on training splits within encapsulation pipelines.
+2. **Robust Scaler Strategy**: Outliers in spatial & trip distances are handled using median and interquartile range scaling (`RobustScaler`) rather than standard mean-variance normalization.
+3. **Embedded L1 Regularization**: Dynamic feature selection via `LassoCV` removes zero-coefficient parameters prior to non-linear model execution.
+4. **End-to-End Serialization**: Model artifacts contain both transformer steps and estimator weights, eliminating training-serving skew during deployment.
+
+---
+
+## 📊 Performance Benchmarks
+
+| Metric | Baseline (Ridge) | Tuned Model (RandomForest) |
+| :--- | :--- | :--- |
+| **MAE** | High Variance | **Optimized** |
+| **RMSE** | Moderate | **Minimized** |
+| **R² Score** | Standard | **Superior Fit** |
+
+---
+
+## 🚀 Quickstart & Inference
+
+### 1. Installation
+```bash
+git clone [https://github.com/YourUsername/Cellula-ML-Task-Fare-Prediction.git](https://github.com/YourUsername/Cellula-ML-Task-Fare-Prediction.git)
+cd Cellula-ML-Task-Fare-Prediction
+pip install -r requirements.txt
